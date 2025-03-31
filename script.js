@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const paymentForm = document.getElementById('payment-form');
     const expirationDateInput = document.getElementById('expiration-date');
     const cvvInput = document.getElementById('cvv');
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
     let cart = [];
 
     // Cargar productos desde la API
@@ -61,8 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const li = document.createElement('li');
             li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
             li.innerHTML = `
-                ${item.title} x${item.quantity} - $${item.price * item.quantity}
-                <span class="badge badge-primary badge-pill">$${item.price}</span>
+                ${item.title} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}
+                <span class="badge badge-primary badge-pill">$${item.price.toFixed(2)}</span>
             `;
             cartItems.appendChild(li);
         });
@@ -133,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
         y += 5;
 
         cart.forEach(item => {
-            doc.text(`${item.title} x${item.quantity} - $${item.price * item.quantity}`, 20, y);
+            doc.text(`${item.title} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`, 20, y);
             y += 5;
         });
 
@@ -143,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Total
         const total = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-        doc.text(`Total: $${total}`, 20, y);
+        doc.text(`Total: $${total.toFixed(2)}`, 20, y);
         y += 10;
 
         // Datos de pago
@@ -168,5 +169,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Limitar el CVV a 3 dígitos
     cvvInput.addEventListener('input', (event) => {
         event.target.value = event.target.value.slice(0, 3);
+    });
+
+    // Modo oscuro
+    darkModeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        darkModeToggle.textContent = document.body.classList.contains('dark-mode') ? 'Modo Claro' : 'Modo Oscuro';
     });
 });
